@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClipCart — Demo</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at 20% 20%,rgba(112,44,255,.15),transparent 30%),radial-gradient(circle at 80% 70%,rgba(255,100,39,.14),transparent 30%),#faf9ff;display:flex;align-items:center;justify-content:center;overflow-x:hidden}
+.demo{width:100%;max-width:1100px;min-height:720px;display:flex;align-items:center;justify-content:space-between;gap:70px;padding:50px}
+.info{max-width:480px}.badge{display:inline-block;padding:10px 16px;border-radius:50px;background:#f0eaff;color:#702cff;font-size:14px;font-weight:700;margin-bottom:22px}
+h1{font-size:clamp(45px,6vw,76px);line-height:.95;letter-spacing:-3px;color:#17172b}
+.gradient{background:linear-gradient(90deg,#702cff,#e832a0,#ff6427);-webkit-background-clip:text;background-clip:text;color:transparent}
+.description{margin-top:25px;color:#686879;font-size:18px;line-height:1.6;max-width:430px}
+.steps{display:flex;gap:10px;margin-top:35px;flex-wrap:wrap}.step{padding:9px 14px;border-radius:30px;background:white;border:1px solid #eceaf4;color:#777;font-size:13px}.step.active{background:#17172b;color:white}
+.phone-area{position:relative;width:360px;height:650px;display:flex;align-items:center;justify-content:center}
+.phone{position:relative;width:300px;height:610px;padding:10px;border-radius:45px;background:#11111c;box-shadow:0 35px 80px rgba(38,20,70,.25),0 10px 25px rgba(0,0,0,.15);transform:rotate(2deg);transition:transform .5s}.phone:hover{transform:rotate(0) translateY(-8px)}
+.screen{position:relative;width:100%;height:100%;overflow:hidden;border-radius:37px;background:#15151f}.notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:95px;height:25px;background:#11111c;border-radius:20px;z-index:20}
+.app-header{position:absolute;top:0;left:0;width:100%;padding:38px 20px 15px;display:flex;align-items:center;justify-content:space-between;z-index:10;color:white}.logo{font-size:18px;font-weight:800}.logo span{background:linear-gradient(90deg,#702cff,#e832a0,#ff6427);-webkit-background-clip:text;color:transparent}
+.feed{width:100%;height:100%;transition:transform .8s cubic-bezier(.22,.61,.36,1)}
+.video-card{position:relative;width:100%;height:100%;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.product-visual{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:100px;position:relative}.visual-one{background:radial-gradient(circle at 50% 35%,#9a6cff,#39205f 60%,#15151f)}.visual-two{background:radial-gradient(circle at 50% 35%,#ff7bbd,#6b244e 60%,#15151f)}.visual-three{background:radial-gradient(circle at 50% 35%,#ff9b62,#693721 60%,#15151f)}
+.product-icon{filter:drop-shadow(0 25px 25px rgba(0,0,0,.35));animation:float 3s ease-in-out infinite}@keyframes float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-15px) rotate(3deg)}}
+.video-info{position:absolute;left:18px;right:70px;bottom:25px;color:white;z-index:5}.video-info h2{font-size:22px;margin-bottom:6px}.video-info p{font-size:13px;opacity:.8}
+.product-button{margin-top:15px;border:0;padding:11px 18px;border-radius:30px;font-weight:700;cursor:pointer;color:white;background:linear-gradient(90deg,#702cff,#e832a0,#ff6427);box-shadow:0 8px 20px rgba(0,0,0,.2);transition:transform .2s}.product-button:hover{transform:scale(1.05)}
+.actions{position:absolute;right:16px;bottom:80px;display:flex;flex-direction:column;gap:17px;z-index:10}.action{width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.3);backdrop-filter:blur(10px);color:white;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;transition:transform .2s}.action:hover{transform:scale(1.12)}.liked{color:#ff4f91}
+.progress{position:absolute;bottom:12px;left:20px;right:20px;height:3px;background:rgba(255,255,255,.25);border-radius:5px;overflow:hidden;z-index:15}.progress-bar{width:0;height:100%;background:white}
+.product-page{position:absolute;inset:0;z-index:30;background:white;transform:translateY(100%);transition:transform .6s cubic-bezier(.22,.61,.36,1);padding:30px 20px}.product-page.show{transform:translateY(0)}.close{width:38px;height:38px;border-radius:50%;border:none;background:#f1eff7;cursor:pointer;font-size:20px}
+.product-image{margin-top:30px;height:240px;border-radius:25px;background:linear-gradient(135deg,#eee6ff,#ffd9ed);display:flex;align-items:center;justify-content:center;font-size:90px}.product-page h2{margin-top:25px;color:#17172b;font-size:25px}.price{margin-top:8px;font-size:22px;font-weight:800;color:#702cff}.store-button{width:100%;margin-top:25px;padding:15px;border:none;border-radius:15px;background:linear-gradient(90deg,#702cff,#e832a0,#ff6427);color:white;font-size:16px;font-weight:700;cursor:pointer}
+@media(max-width:800px){.demo{flex-direction:column;padding:30px 20px;gap:35px}.info{text-align:center}.description{margin-left:auto;margin-right:auto}.phone-area{transform:scale(.85);margin-top:-30px}}
+</style>
+</head>
+<body>
+<div class="demo">
+<section class="info">
+<div class="badge">✨ Así funciona ClipCart</div>
+<h1>Descubre.<br><span class="gradient">Desliza.</span><br>Encuentra.</h1>
+<p class="description">Explora vídeos cortos, descubre productos interesantes y accede directamente a ellos. Todo desde una experiencia rápida y visual.</p>
+<div class="steps"><div class="step active">🎬 Descubre</div><div class="step">🛍️ Encuentra</div><div class="step">🔗 Accede</div></div>
+</section>
+<section class="phone-area">
+<div class="phone"><div class="screen">
+<div class="notch"></div>
+<div class="app-header"><div class="logo">Clip<span>Cart</span></div><div>⋯</div></div>
+<div class="feed" id="feed">
+<div class="video-card"><div class="product-visual visual-one"><div class="product-icon">👟</div></div><div class="video-info"><h2>Zapatillas deportivas</h2><p>Descubierto en ClipCart</p><button class="product-button" onclick="openProduct('Zapatillas deportivas','👟','59,99 €')">Ver producto →</button></div><div class="actions"><button class="action like">♡</button><button class="action">💬</button><button class="action">↗</button></div></div>
+<div class="video-card"><div class="product-visual visual-two"><div class="product-icon">🎧</div></div><div class="video-info"><h2>Auriculares</h2><p>Producto destacado</p><button class="product-button" onclick="openProduct('Auriculares','🎧','39,99 €')">Ver producto →</button></div><div class="actions"><button class="action like">♡</button><button class="action">💬</button><button class="action">↗</button></div></div>
+<div class="video-card"><div class="product-visual visual-three"><div class="product-icon">🎒</div></div><div class="video-info"><h2>Mochila urbana</h2><p>Tendencia en ClipCart</p><button class="product-button" onclick="openProduct('Mochila urbana','🎒','44,99 €')">Ver producto →</button></div><div class="actions"><button class="action like">♡</button><button class="action">💬</button><button class="action">↗</button></div></div>
+</div>
+<div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+<div class="product-page" id="productPage"><button class="close" onclick="closeProduct()">×</button><div class="product-image" id="productImage">👟</div><h2 id="productName">Producto</h2><div class="price" id="productPrice">59,99 €</div><button class="store-button">Visitar tienda →</button></div>
+</div></div>
+</section>
+</div>
+<script>
+let currentSlide=0;const feed=document.getElementById("feed"),progress=document.getElementById("progressBar"),totalSlides=3,slideTime=4500;let timer,progressTimer;
+function nextSlide(){currentSlide++;if(currentSlide>=totalSlides)currentSlide=0;feed.style.transform=`translateY(-${currentSlide*100}%)`;resetProgress()}
+function resetProgress(){clearInterval(progressTimer);progress.style.width="0%";let start=Date.now();progressTimer=setInterval(()=>{let p=Math.min((Date.now()-start)/slideTime*100,100);progress.style.width=p+"%";if(p>=100)clearInterval(progressTimer)},30)}
+function startAutoPlay(){clearInterval(timer);timer=setInterval(nextSlide,slideTime);resetProgress()}startAutoPlay();
+document.querySelectorAll(".like").forEach(b=>b.addEventListener("click",()=>{b.classList.toggle("liked");b.textContent=b.classList.contains("liked")?"♥":"♡"}));
+function openProduct(name,icon,price){document.getElementById("productName").textContent=name;document.getElementById("productImage").textContent=icon;document.getElementById("productPrice").textContent=price;document.getElementById("productPage").classList.add("show")}
+function closeProduct(){document.getElementById("productPage").classList.remove("show")}
+let startY=0,endY=0;const screen=document.querySelector(".screen");screen.addEventListener("touchstart",e=>startY=e.touches[0].clientY);screen.addEventListener("touchend",e=>{endY=e.changedTouches[0].clientY;let d=startY-endY;if(Math.abs(d)>=50&&d>0)nextSlide()});screen.addEventListener("wheel",e=>{if(e.deltaY>0)nextSlide()});
+</script>
+</body>
+</html>
